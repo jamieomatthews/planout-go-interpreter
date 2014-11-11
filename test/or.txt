@@ -1,0 +1,32 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "a",
+      "value": 1
+    },
+    {
+      "op": "set",
+      "var": "b",
+      "value": 0
+    },
+    {
+      "op": "set",
+      "var": "x",
+      "value": {
+        "op": "or",
+        "values": [
+          {
+            "op": "get",
+            "var": "a"
+          },
+          {
+            "op": "get",
+            "var": "b"
+          }
+        ]
+      }
+    }
+  ]
+}

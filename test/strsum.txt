@@ -1,0 +1,32 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "a",
+      "value": "aaa"
+    },
+    {
+      "op": "set",
+      "var": "b",
+      "value": "bbb"
+    },
+    {
+      "op": "set",
+      "var": "c",
+      "value": {
+        "op": "sum",
+        "values": [
+          {
+            "op": "get",
+            "var": "a"
+          },
+          {
+            "op": "get",
+            "var": "b"
+          }
+        ]
+      }
+    }
+  ]
+}

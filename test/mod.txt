@@ -1,0 +1,30 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "a",
+      "value": 5
+    },
+    {
+      "op": "set",
+      "var": "b",
+      "value": 2
+    },
+    {
+      "op": "set",
+      "var": "c",
+      "value": {
+        "op": "%",
+        "left": {
+          "op": "get",
+          "var": "a"
+        },
+        "right": {
+          "op": "get",
+          "var": "b"
+        }
+      }
+    }
+  ]
+}

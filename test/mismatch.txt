@@ -1,0 +1,56 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "a",
+      "value": 10
+    },
+    {
+      "op": "set",
+      "var": "b",
+      "value": "bbb"
+    },
+    {
+      "op": "cond",
+      "cond": [
+        {
+          "if": {
+            "op": "equals",
+            "left": {
+              "op": "get",
+              "var": "a"
+            },
+            "right": {
+              "op": "get",
+              "var": "b"
+            }
+          },
+          "then": {
+            "op": "seq",
+            "seq": [
+              {
+                "op": "set",
+                "var": "x",
+                "value": 1
+              }
+            ]
+          }
+        },
+        {
+          "if": true,
+          "then": {
+            "op": "seq",
+            "seq": [
+              {
+                "op": "set",
+                "var": "x",
+                "value": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

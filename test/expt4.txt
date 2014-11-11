@@ -1,0 +1,31 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "numbers",
+      "value": {
+        "op": "array",
+        "values": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "op": "set",
+      "var": "len",
+      "value": {
+        "values": [
+          {
+            "op": "get",
+            "var": "numbers"
+          }
+        ],
+        "op": "length"
+      }
+    }
+  ]
+}

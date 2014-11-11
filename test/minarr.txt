@@ -1,0 +1,22 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "x",
+      "value": {
+        "values": [
+          {
+            "op": "array",
+            "values": [
+              1,
+              2,
+              -4
+            ]
+          }
+        ],
+        "op": "min"
+      }
+    }
+  ]
+}

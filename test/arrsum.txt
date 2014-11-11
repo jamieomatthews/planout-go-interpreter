@@ -1,0 +1,46 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "a",
+      "value": {
+        "op": "array",
+        "values": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "op": "set",
+      "var": "b",
+      "value": {
+        "op": "array",
+        "values": [
+          4,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "op": "set",
+      "var": "c",
+      "value": {
+        "op": "sum",
+        "values": [
+          {
+            "op": "get",
+            "var": "a"
+          },
+          {
+            "op": "get",
+            "var": "b"
+          }
+        ]
+      }
+    }
+  ]
+}
