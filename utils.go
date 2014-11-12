@@ -1,9 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"math/rand"
 	"reflect"
+	"strconv"
 )
+
+func getOrElse(m map[string]interface{}, key string, def interface{}) interface{} {
+	v, exists := m[key]
+	if !exists {
+		return def
+	}
+	return v
+}
 
 func assertKind(lhs, rhs interface{}, opstr string) {
 	lhstype, rhstype := reflect.ValueOf(lhs), reflect.ValueOf(rhs)
@@ -145,4 +156,46 @@ func multiplySlice(x []interface{}) interface{} {
 		}
 	}
 	return ret
+}
+
+func generateUnitStr(units interface{}) string {
+	unitval := reflect.ValueOf(units)
+	switch unitval.Kind() {
+	case reflect.Array, reflect.Slice:
+		v := units.([]interface{})
+		n := len(v)
+		var buffer bytes.Buffer
+		buffer.WriteString(v[0].(string))
+		for i := 0; i < n; i++ {
+			if i != 0 {
+				buffer.WriteString(".")
+				buffer.WriteString(v[i].(string))
+			}
+		}
+		return buffer.String()
+	case reflect.String:
+		return unitval.String()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(unitval.Int(), 10)
+	}
+	return ""
+}
+
+func getCummulativeWeights(weights []interface{}) (float64, []float64) {
+	nweights := len(weights)
+	cweights := make([]float64, nweights)
+	sum := 0.0
+	for i := range weights {
+		sum = sum + weights[i].(float64)
+		cweights[i] = sum
+	}
+	return sum, cweights
+}
+
+func generateString() string {
+	s := make([]byte, 10)
+	for j := 0; j < 10; j++ {
+		s[j] = 'a' + byte(rand.Int()%26)
+	}
+	return string(s)
 }

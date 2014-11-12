@@ -40,7 +40,5 @@ func experiment(code interface{}, params map[string]interface{}) bool {
 
 	evaluate(code, params)
 
-	fmt.Printf("Operands:: %v\n", params)
-
 	return true
 }

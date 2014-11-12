@@ -14,8 +14,6 @@ func init() {
 		"set":            true,
 		"seq":            true,
 		"get":            true,
-		"uniformChoice":  true,
-		"bernoulliTrial": true,
 		"array":          true,
 		"length":         true,
 		"cond":           true,
@@ -33,6 +31,11 @@ func init() {
 		"product":        true,
 		"%":              true,
 		"/":              true,
+		"uniformChoice":  true,
+		"bernoulliTrial": true,
+		"weightedChoice": true,
+		"randomInteger":  true,
+		"randomFloat":    true,
 	}
 
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -68,10 +71,6 @@ func getOperator(opstr string, p map[string]interface{}) operator {
 		op = &set{p}
 	case opstr == "get":
 		op = &get{p}
-	case opstr == "uniformChoice":
-		op = &uniformChoice{p}
-	case opstr == "bernoulliTrial":
-		op = &bernoulliTrial{p}
 	case opstr == "array":
 		op = &array{p}
 	case opstr == "length":
@@ -106,6 +105,16 @@ func getOperator(opstr string, p map[string]interface{}) operator {
 		op = &mod{p}
 	case opstr == "/":
 		op = &div{p}
+	case opstr == "uniformChoice":
+		op = &uniformChoice{p}
+	case opstr == "bernoulliTrial":
+		op = &bernoulliTrial{p}
+	case opstr == "weightedChoice":
+		op = &weightedChoice{p}
+	case opstr == "randomFloat":
+		op = &randomFloat{p}
+	case opstr == "randomInteger":
+		op = &randomInteger{p}
 	}
 	return op
 }
@@ -119,6 +128,7 @@ func (s *seq) execute(m map[string]interface{}) interface{} {
 type set struct{ params map[string]interface{} }
 
 func (s *set) execute(m map[string]interface{}) interface{} {
+	s.params["salt"] = m["var"].(string)
 	value := evaluate(m["value"], s.params)
 	s.params[m["var"].(string)] = value
 	return true
@@ -127,23 +137,11 @@ func (s *set) execute(m map[string]interface{}) interface{} {
 type get struct{ params map[string]interface{} }
 
 func (s *get) execute(m map[string]interface{}) interface{} {
-	return s.params[m["var"].(string)]
-}
-
-type uniformChoice struct{ params map[string]interface{} }
-
-func (s *uniformChoice) execute(m map[string]interface{}) interface{} {
-	ret := evaluate(m["choices"], s.params).([]interface{})
-	fmt.Printf("UniformChoice::\nUnit: %v, Choices: %v of length %v\n", m["unit"], ret, len(ret))
-	return ret[rand.Intn(len(ret))]
-}
-
-type bernoulliTrial struct{ params map[string]interface{} }
-
-func (s *bernoulliTrial) execute(m map[string]interface{}) interface{} {
-	ret := evaluate(m["choices"], s.params).([]interface{})
-	fmt.Printf("BernoulliTrial::\nUnit: %v, Choices: %v of length %v\n", m["unit"], ret, len(ret))
-	return ret[rand.Intn(len(ret))]
+	value, exists := s.params[m["var"].(string)]
+	if !exists {
+		panic(fmt.Sprintf("No input for key %v\n", m["var"]))
+	}
+	return value
 }
 
 type array struct{ params map[string]interface{} }

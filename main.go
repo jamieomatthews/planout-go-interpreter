@@ -20,12 +20,13 @@ func main() {
 	// Set input parameters
 	params := make(map[string]interface{})
 	params["country"] = "US"
+	params["userid"] = generateString()
 
 	// Run experiment
 	success := experiment(js, params)
-	if success {
-		fmt.Println("Success running experiment!")
-	} else {
+	if !success {
 		fmt.Println("Failed running experiment!")
+	} else {
+		fmt.Printf("Operands:: %v\n", params)
 	}
 }

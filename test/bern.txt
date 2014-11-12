@@ -1,0 +1,17 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "x",
+      "value": {
+        "p": 0.5,
+        "unit": {
+          "op": "get",
+          "var": "userid"
+        },
+        "op": "bernoulliTrial"
+      }
+    }
+  ]
+}

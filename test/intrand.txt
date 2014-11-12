@@ -1,0 +1,17 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "x",
+      "value": {
+        "unit": {
+          "op": "get",
+          "var": "userid"
+        },
+	"max": 100,
+        "op": "randomInteger"
+      }
+    }
+  ]
+}

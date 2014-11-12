@@ -1,0 +1,32 @@
+{
+  "op": "seq",
+  "seq": [
+    {
+      "op": "set",
+      "var": "x",
+      "value": {
+        "choices": {
+          "op": "array",
+          "values": [
+            "a",
+            "b",
+            "c"
+          ]
+        },
+        "weights": {
+          "op": "array",
+          "values": [
+            0.3,
+            0.3,
+            0.4
+          ]
+        },
+        "unit": {
+          "op": "get",
+          "var": "userid"
+        },
+        "op": "weightedChoice"
+      }
+    }
+  ]
+}
