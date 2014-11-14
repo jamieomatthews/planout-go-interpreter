@@ -1,4 +1,4 @@
-package main
+package goplanout
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func evaluate(code interface{}, params map[string]interface{}) interface{} {
 	return code
 }
 
-func experiment(code interface{}, params map[string]interface{}) bool {
+func Experiment(code interface{}, params map[string]interface{}) bool {
 
 	defer func() bool {
 		if r := recover(); r != nil {

@@ -1,4 +1,4 @@
-package main
+package goplanout
 
 import (
 	"encoding/json"
@@ -30,18 +30,18 @@ func TestUniformChoice(t *testing.T) {
 
 	// Run experiment with id1
 	params["userid"] = id1
-	experiment(js, params)
+	Experiment(js, params)
 	x1 := params["x"]
 	fmt.Printf("Params: %v\n", params)
 
  	// Run experiment with id2
  	params["userid"] = id2
- 	experiment(js, params)
+ 	Experiment(js, params)
 	fmt.Printf("Params: %v\n", params)
 
 	// Run experiment with id3
 	params["userid"] = id3
-	experiment(js, params)
+	Experiment(js, params)
 	x3 := params["x"]
 	fmt.Printf("Params: %v\n", params)
 

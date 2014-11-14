@@ -1,4 +1,4 @@
-package main
+package goplanout
 
 import (
 	"fmt"

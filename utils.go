@@ -1,4 +1,4 @@
-package main
+package goplanout
 
 import (
 	"bytes"
@@ -177,6 +177,8 @@ func generateUnitStr(units interface{}) string {
 		return unitval.String()
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return strconv.FormatInt(unitval.Int(), 10)
+	case reflect.Float32, reflect.Float64:
+		return strconv.FormatFloat(unitval.Float(), 'f', -1, 64)
 	}
 	return ""
 }
