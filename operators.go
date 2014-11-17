@@ -11,31 +11,33 @@ var ops map[string]bool
 
 func init() {
 	ops = map[string]bool{
-		"set":            true,
-		"seq":            true,
-		"get":            true,
-		"array":          true,
-		"length":         true,
-		"cond":           true,
-		">":              true,
-		">=":             true,
-		"<":              true,
-		"<=":             true,
-		"equals":         true,
-		"and":            true,
-		"or":             true,
-		"not":            true,
-		"min":            true,
-		"max":            true,
-		"sum":            true,
-		"product":        true,
-		"%":              true,
-		"/":              true,
-		"uniformChoice":  true,
-		"bernoulliTrial": true,
-		"weightedChoice": true,
-		"randomInteger":  true,
-		"randomFloat":    true,
+		"set":             true,
+		"seq":             true,
+		"get":             true,
+		"array":           true,
+		"length":          true,
+		"cond":            true,
+		">":               true,
+		">=":              true,
+		"<":               true,
+		"<=":              true,
+		"equals":          true,
+		"and":             true,
+		"or":              true,
+		"not":             true,
+		"min":             true,
+		"max":             true,
+		"sum":             true,
+		"product":         true,
+		"%":               true,
+		"/":               true,
+		"uniformChoice":   true,
+		"bernoulliTrial":  true,
+		"bernoulliFilter": true,
+		"weightedChoice":  true,
+		"randomInteger":   true,
+		"randomFloat":     true,
+		"sample":          true,
 	}
 
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -109,12 +111,16 @@ func getOperator(opstr string, p map[string]interface{}) operator {
 		op = &uniformChoice{p}
 	case opstr == "bernoulliTrial":
 		op = &bernoulliTrial{p}
+	case opstr == "bernoulliFilter":
+		op = &bernoulliFilter{p}
 	case opstr == "weightedChoice":
 		op = &weightedChoice{p}
 	case opstr == "randomFloat":
 		op = &randomFloat{p}
 	case opstr == "randomInteger":
 		op = &randomInteger{p}
+	case opstr == "sample":
+		op = &sample{p}
 	}
 	return op
 }

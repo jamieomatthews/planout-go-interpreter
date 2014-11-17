@@ -2,9 +2,9 @@ package goplanout
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"testing"
-	"fmt"
 )
 
 func TestUniformChoice(t *testing.T) {
@@ -34,9 +34,9 @@ func TestUniformChoice(t *testing.T) {
 	x1 := params["x"]
 	fmt.Printf("Params: %v\n", params)
 
- 	// Run experiment with id2
- 	params["userid"] = id2
- 	Experiment(js, params)
+	// Run experiment with id2
+	params["userid"] = id2
+	Experiment(js, params)
 	fmt.Printf("Params: %v\n", params)
 
 	// Run experiment with id3

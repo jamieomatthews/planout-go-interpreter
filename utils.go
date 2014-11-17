@@ -201,3 +201,16 @@ func generateString() string {
 	}
 	return string(s)
 }
+
+func toString(unit interface{}) string {
+	unitval := reflect.ValueOf(unit)
+	switch unitval.Kind() {
+	case reflect.String:
+		return unitval.String()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(unitval.Int(), 10)
+	case reflect.Float32, reflect.Float64:
+		return strconv.FormatFloat(unitval.Float(), 'f', -1, 64)
+	}
+	return ""
+}
