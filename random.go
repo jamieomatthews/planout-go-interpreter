@@ -24,11 +24,20 @@ func hash(in string) uint64 {
 
 func generateExperimentId(units interface{}, params map[string]interface{}) string {
 	unitstr := generateUnitStr(units)
-	salt, exists := params["full_salt"]
-	if !exists {
-		salt = params["salt"]
+	var salt string = ""
+	full_salt, exists := params["full_salt"]
+	if exists {
+		salt = full_salt.(string)
+	} else {
+		expt_salt, exists := params["experiment_salt"]
+		if exists {
+			salt = expt_salt.(string)
+			salt = salt + "." + params["salt"].(string)
+		} else {
+			salt = params["salt"].(string)
+		}
 	}
-	experimentid := salt.(string)
+	experimentid := salt
 	if unitstr != "" {
 		experimentid = experimentid + "." + unitstr
 	}
