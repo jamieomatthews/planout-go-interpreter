@@ -99,9 +99,9 @@ func (s *bernoulliTrial) execute(m map[string]interface{}) interface{} {
 	pvalue := evaluate(m["p"], s.params).(float64)
 	rand_val := getUniform(m, s.params, 0.0, 1.0)
 	if rand_val <= pvalue {
-		return 0
+		return 1
 	}
-	return 1
+	return 0
 }
 
 type bernoulliFilter struct{ params map[string]interface{} }

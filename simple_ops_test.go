@@ -14,13 +14,14 @@ func readTest(f string) map[string]interface{} {
 	return js
 }
 
-func TestSet(t *testing.T) {
+func TestSimpleOps(t *testing.T) {
 	js := readTest("test/simple_ops.json")
 	params := make(map[string]interface{})
 	
 	ok := Experiment(js, params)
 	if !ok {
 		t.Errorf("Error running experiment 'test/simple_ops.json'\n")
+		return
 	}
 
 	a := params["a"]
