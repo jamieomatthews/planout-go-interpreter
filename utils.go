@@ -3,6 +3,7 @@ package goplanout
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"math/rand"
 	"reflect"
 	"strconv"
@@ -19,7 +20,7 @@ func getOrElse(m map[string]interface{}, key string, def interface{}) interface{
 func assertKind(lhs, rhs interface{}, opstr string) {
 	lhstype, rhstype := reflect.ValueOf(lhs), reflect.ValueOf(rhs)
 	if lhstype.Kind() != rhstype.Kind() {
-		panic(fmt.Sprintf("%v: Type mismatch between LHS %v and RHS %v\n", opstr, lhs, rhs))
+		panic(fmt.Sprintf("%v: Type mismatch between LHS %v (%v) and RHS %v (%v)\n", opstr, lhs, lhstype.Kind(), rhs, rhstype.Kind()))
 	}
 }
 
@@ -33,7 +34,7 @@ func compare(lhs, rhs interface{}) int {
 	case reflect.String:
 		return cmpString(lval.String(), rval.String())
 	}
-	panic(fmt.Sprintln("Compare: Unsupported type"))
+	panic(fmt.Sprintf("Compare: Unsupported type %v\n", lval.Kind()))
 }
 
 func isTrue(v interface{}) bool {
@@ -68,7 +69,7 @@ func isFalse(v interface{}) bool {
 
 func cmpFloat(lhs, rhs float64) int {
 	ret := 0
-	if lhs == rhs {
+	if math.Abs(lhs-rhs) < 0.0001 {
 		ret = 0
 	} else if lhs < rhs {
 		ret = -1

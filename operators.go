@@ -160,9 +160,9 @@ type length struct{ params map[string]interface{} }
 
 func (s *length) execute(m map[string]interface{}) interface{} {
 	values := evaluate(m["values"], s.params).([]interface{})
-	l := make([]int, len(values))
+	l := make([]float64, len(values))
 	for i, value := range values {
-		l[i] = len(value.([]interface{}))
+		l[i] = float64(len(value.([]interface{})))
 	}
 	return l[0]
 }
@@ -264,9 +264,15 @@ type min struct{ params map[string]interface{} }
 func (s *min) execute(m map[string]interface{}) interface{} {
 	values := evaluate(m["values"], s.params).([]interface{})
 	if len(values) == 0 {
-		return false
+		panic(fmt.Sprintf("Executing min() with no arguments\n"))
 	}
-	return values[0]
+	minval := values[0]
+	for i := range values {
+		if compare(values[i], minval) < 0 {
+			minval = values[i]
+		}
+	}
+	return minval
 }
 
 type max struct{ params map[string]interface{} }
@@ -274,9 +280,15 @@ type max struct{ params map[string]interface{} }
 func (s *max) execute(m map[string]interface{}) interface{} {
 	values := evaluate(m["values"], s.params).([]interface{})
 	if len(values) == 0 {
-		return false
+		panic(fmt.Sprintf("Executing max() with no arguments\n"))
 	}
-	return values[len(values)-1]
+	maxval := values[0]
+	for i := range values {
+		if compare(values[i], maxval) > 0 {
+			maxval = values[i]
+		}
+	}
+	return maxval
 }
 
 type sum struct{ params map[string]interface{} }
