@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 URX
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,16 @@ import (
 	"strconv"
 )
 
+func existOrPanic(m map[string]interface{}, keys []string, opstr string) bool {
+	for i := range keys {
+		_, exist := m[keys[i]]
+		if !exist {
+			panic(fmt.Sprintf("Operator %s: Missing operand %s\n", opstr, keys[i]))
+		}
+	}
+	return true
+}
+
 func getOrElse(m map[string]interface{}, key string, def interface{}) interface{} {
 	v, exists := m[key]
 	if !exists {
@@ -41,46 +51,26 @@ func assertKind(lhs, rhs interface{}, opstr string) {
 }
 
 func compare(lhs, rhs interface{}) int {
-	lval, rval := reflect.ValueOf(lhs), reflect.ValueOf(rhs)
-	switch lval.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return cmpInt(lval.Int(), rval.Int())
-	case reflect.Float32, reflect.Float64:
-		return cmpFloat(lval.Float(), rval.Float())
-	case reflect.String:
-		return cmpString(lval.String(), rval.String())
+	switch lhs.(type) {
+	case string:
+		return cmpString(lhs.(string), rhs.(string))
+	default:
+		return cmpFloat(toNumber(lhs), toNumber(rhs))
 	}
-	panic(fmt.Sprintf("Compare: Unsupported type %v\n", lval.Kind()))
+	panic(fmt.Sprintf("Compare: Unsupported type\n"))
 }
 
-func isTrue(v interface{}) bool {
-	lval := reflect.ValueOf(v)
-	switch lval.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return cmpInt(lval.Int(), 1) == 0
-	case reflect.Float32, reflect.Float64:
-		return cmpFloat(lval.Float(), 1.0) == 0
-	case reflect.Bool:
-		return lval.Bool()
-	case reflect.String:
-		return len(lval.String()) > 0
+func isTrue(value interface{}) bool {
+	switch value.(type) {
+	case string:
+		return len(value.(string)) > 0
+	case bool:
+		return value.(bool)
+	default:
+		n := toNumber(value)
+		return cmpFloat(n, 1.0) == 0
 	}
-	panic(fmt.Sprintln("IsTrue: Unsupported type"))
-}
-
-func isFalse(v interface{}) bool {
-	lval := reflect.ValueOf(v)
-	switch lval.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return cmpInt(lval.Int(), 0) == 0
-	case reflect.Float32, reflect.Float64:
-		return cmpFloat(lval.Float(), 0.0) == 0
-	case reflect.Bool:
-		return !lval.Bool()
-	case reflect.String:
-		return len(lval.String()) <= 0
-	}
-	panic(fmt.Sprintln("IsFalse: Unsupported type"))
+	panic(fmt.Sprintf("IsTrue: Unsupported type\n"))
 }
 
 func cmpFloat(lhs, rhs float64) int {
@@ -230,4 +220,41 @@ func toString(unit interface{}) string {
 		return strconv.FormatFloat(unitval.Float(), 'f', -1, 64)
 	}
 	return ""
+}
+
+func toNumber(value interface{}) float64 {
+	switch value := value.(type) {
+	case float32, float64:
+		x, ok := value.(float64)
+		if !ok {
+			x = float64(value.(float32))
+		}
+		return x
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		i := reflect.ValueOf(value)
+		return float64(i.Int())
+	default:
+		panic(fmt.Sprintf("Rounding operation: Unsupported type %v\n", value))
+	}
+	return 0.0
+}
+
+func roundNumber(value interface{}) interface{} {
+	switch value := value.(type) {
+	case float32, float64:
+		x, ok := value.(float64)
+		if !ok {
+			x = float64(value.(float32))
+		}
+		x_floor := math.Floor(x)
+		if math.Abs(x-x_floor) < 0.5 {
+			return x_floor
+		}
+		return math.Ceil(x)
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return value
+	default:
+		panic(fmt.Sprintf("Rounding operation: Unsupported type %v\n", value))
+	}
+	return value
 }

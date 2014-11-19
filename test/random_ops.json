@@ -164,6 +164,10 @@
           "op": "get",
           "var": "numbers"
         },
+        "unit": {
+          "op": "get",
+          "var": "userid"
+        },
         "op": "sample"
       }
     },
@@ -176,6 +180,10 @@
           "var": "numbers"
         },
         "draws": 3,
+        "unit": {
+          "op": "get",
+          "var": "userid"
+        },
         "op": "sample"
       }
     },
@@ -219,6 +227,22 @@
           "var": "userid"
         },
         "op": "randomInteger"
+      }
+    },
+    {
+      "op": "set",
+      "var": "n",
+      "value": 10
+    },
+    {
+      "op": "set",
+      "var": "o",
+      "value": {
+        "op": "negative",
+        "value": {
+          "op": "get",
+          "var": "n"
+        }
       }
     }
   ]

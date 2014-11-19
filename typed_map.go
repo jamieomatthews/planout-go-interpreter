@@ -1,11 +1,15 @@
 package goplanout
 
-type TypedMap struct{
-	data	map[string]interface{}
+import (
+	"reflect"
+)
+
+type TypedMap struct {
+	data map[string]interface{}
 }
 
 func NewTypedMap(data map[string]interface{}) *TypedMap {
-	return &TypedMap{data:data}
+	return &TypedMap{data: data}
 }
 
 func (t *TypedMap) get(key string) (interface{}, bool) {
@@ -15,72 +19,120 @@ func (t *TypedMap) get(key string) (interface{}, bool) {
 
 func (t *TypedMap) getString(key string) (string, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(string), true
+
+	if !exists {
+		return "", false
 	}
 
-	return "", false
+	if reflect.TypeOf(value).String() != "string" {
+		return "", false
+	}
+
+	return value.(string), true
+
 }
 
 func (t *TypedMap) getBool(key string) (bool, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(bool), true
+
+	if !exists {
+		return false, false
 	}
 
-	return false, false
+	if reflect.TypeOf(value).String() != "bool" {
+		return false, false
+	}
+
+	return value.(bool), true
+
 }
 
 func (t *TypedMap) getInt(key string) (int, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(int), true
+
+	if !exists {
+		return 0, false
 	}
 
-	return 0, false
+	if reflect.TypeOf(value).String() != "int" {
+		return 0, false
+	}
+
+	return value.(int), true
+
 }
 
 func (t *TypedMap) getInt64(key string) (int64, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(int64), true
+
+	if !exists {
+		return 0, false
 	}
 
-	return 0, false
+	if reflect.TypeOf(value).String() != "int64" {
+		return 0, false
+	}
+
+	return value.(int64), true
+
 }
 
 func (t *TypedMap) getFloat32(key string) (float32, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(float32), true
+
+	if !exists {
+		return 0.0, false
 	}
 
-	return 0.0, false
+	if reflect.TypeOf(value).String() != "float32" {
+		return 0.0, false
+	}
+
+	return value.(float32), true
+
 }
 
 func (t *TypedMap) getFloat64(key string) (float64, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(float64), true
+
+	if !exists {
+		return 0.0, false
 	}
 
-	return 0.0, false
+	if reflect.TypeOf(value).String() != "float64" {
+		return 0.0, false
+	}
+
+	return value.(float64), true
+
 }
 
 func (t *TypedMap) getMap(key string) (map[string]interface{}, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.(map[string]interface{}), true
+
+	if !exists {
+		return nil, false
 	}
 
-	return nil, false
+	if reflect.TypeOf(value).String() != "map[string]interface {}" {
+		return nil, false
+	}
+
+	return value.(map[string]interface{}), true
+
 }
 
 func (t *TypedMap) getArray(key string) ([]interface{}, bool) {
 	value, exists := t.get(key)
-	if exists {
-		return value.([]interface{}), true
+
+	if !exists {
+		return nil, false
 	}
 
-	return nil, false
+	if reflect.TypeOf(value).String() != "[]interface {}" {
+		return nil, false
+	}
+
+	return value.([]interface{}), true
+
 }

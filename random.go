@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 URX
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -102,6 +102,7 @@ func getUniform(m, params map[string]interface{}, min, max float64, appended_uni
 type uniformChoice struct{ params map[string]interface{} }
 
 func (s *uniformChoice) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"choices", "unit"}, "UniformChoice")
 	choices := evaluate(m["choices"], s.params).([]interface{})
 	nchoices := uint64(len(choices))
 	idx := getHash(m, s.params) % nchoices
@@ -112,6 +113,7 @@ func (s *uniformChoice) execute(m map[string]interface{}) interface{} {
 type bernoulliTrial struct{ params map[string]interface{} }
 
 func (s *bernoulliTrial) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"unit"}, "BernoulliTrial")
 	pvalue := evaluate(m["p"], s.params).(float64)
 	rand_val := getUniform(m, s.params, 0.0, 1.0)
 	if rand_val <= pvalue {
@@ -123,6 +125,7 @@ func (s *bernoulliTrial) execute(m map[string]interface{}) interface{} {
 type bernoulliFilter struct{ params map[string]interface{} }
 
 func (s *bernoulliFilter) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"choices", "unit"}, "BernoulliFilter")
 	pvalue := evaluate(m["p"], s.params).(float64)
 	choices := evaluate(m["choices"], s.params).([]interface{})
 	ret := make([]interface{}, 0, len(choices))
@@ -139,6 +142,7 @@ func (s *bernoulliFilter) execute(m map[string]interface{}) interface{} {
 type weightedChoice struct{ params map[string]interface{} }
 
 func (s *weightedChoice) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"choices", "unit", "weights"}, "WeightedChoice")
 	weights := evaluate(m["weights"], s.params).([]interface{})
 	sum, cweights := getCummulativeWeights(weights)
 	stop_val := getUniform(m, s.params, 0.0, sum)
@@ -154,6 +158,7 @@ func (s *weightedChoice) execute(m map[string]interface{}) interface{} {
 type randomFloat struct{ params map[string]interface{} }
 
 func (s *randomFloat) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"unit"}, "RandomFloat")
 	min_val := getOrElse(m, "min", 0.0)
 	max_val := getOrElse(m, "max", 1.0)
 	return getUniform(m, s.params, min_val.(float64), max_val.(float64))
@@ -162,6 +167,7 @@ func (s *randomFloat) execute(m map[string]interface{}) interface{} {
 type randomInteger struct{ params map[string]interface{} }
 
 func (s *randomInteger) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"unit"}, "RandomFloat")
 	min_val := uint64(getOrElse(m, "min", 0.0).(float64))
 	max_val := uint64(getOrElse(m, "max", 1.0).(float64))
 	return min_val + getHash(m, s.params)%(max_val-min_val+1)
@@ -170,6 +176,7 @@ func (s *randomInteger) execute(m map[string]interface{}) interface{} {
 type sample struct{ params map[string]interface{} }
 
 func (s *sample) execute(m map[string]interface{}) interface{} {
+	existOrPanic(m, []string{"unit", "choices"}, "Sample")
 	choices := evaluate(m["choices"], s.params).([]interface{})
 	nchoices := len(choices)
 	for i := nchoices - 1; i >= 0; i-- {
