@@ -3,6 +3,9 @@ planout-go-interpreter
 
 (Multi Variate Testing) Interpreter for Planout code written in Golang
 
+Here's an example program that consumes compiled planout code and executes 
+the associated experiment using the golang interpreter.
+
 ```
 package main
 
@@ -42,11 +45,11 @@ func main() {
 	params["experiment_salt"] = "expt"
 	params["userid"] = generateString()
 
-  // Calling goplanout.Experiment runs the planout code
-  // given the input params. It returns true if no errors
-  // were encountered during the run. False, otherwise.
-  // During the run, any variables that are evaluated
-  // are added to the dictionary along with its value.
+	// Calling goplanout.Experiment runs the planout code
+	// given the input params. It returns true if no errors
+	// were encountered during the run. False, otherwise.
+	// During the run, any variables that are evaluated
+	// are added to the dictionary along with its value.
 	ok := goplanout.Experiment(js, params)
 	if !ok {
 		fmt.Println("Failed to run the experiment")
