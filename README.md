@@ -1,7 +1,7 @@
 planout-go-interpreter
 ======================
 
-(Multi Variate Testing) Interpreter for Planout code written in Golang
+## (Multi Variate Testing) Interpreter for Planout code written in Golang
 
 Here's an example program that consumes compiled planout code and executes 
 the associated experiment using the golang interpreter.
@@ -100,3 +100,8 @@ Each execution of the above experiment will result in setting the variable 'id'.
 Params: map[experiment_salt:expt userid:noocavzddw salt:id id:2]
 Params: map[experiment_salt:expt userid:cuncjyqmmz salt:id id:1]
 ```
+
+## How it works
+
+The entry point, `golang.Experiment`, to the interpreter takes two arguments: (1) The planout code and (2) Input parameters. The planout code is the json output of planout compiler that is unmarshaled into a `map[string]interface{}`. The input parameters must contain the values for variables that are necessary to run the experiment. For intance, in order to be able to run the experiment `id = uniformChoice(choices=[1, 2, 3, 4], unit=userid);`, the interpreter must have access to the `userid`.
+
